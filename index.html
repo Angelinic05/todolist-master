@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APP TO DO LIST</title>  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Menu de navegación -->
+    <div class="menu">
+        <button id="inicio" class="menu-item">Inicio</button>
+        <button id="jeyson" class="menu-item">Jeyson</button>
+        <button id="cristian" class="menu-item">Cristian</button>
+        <button id="angeli" class="menu-item">Angeli</button>
+    </div>
+    
+
+    <div class="perfil">
+        <div id="fecha"></div>
+        <h1>PLATAFORMAS</h1>
+        <span>Vamos a cumplir tus metas</span>
+    </div>
+
+    <!-- Formulario para agregar tarea -->
+    <div id="formulario" class="agregar-tarea">
+        <input type="text" id="input" placeholder="Agregar una tarea" required>
+        <input type="date" id="start-date" placeholder="Fecha de inicio" required>
+        <input type="date" id="end-date" placeholder="Fecha de finalización" required>
+        <textarea id="details" placeholder="Detalles de la tarea" required></textarea>
+        <select id="status" required>
+            <option value="Pendiente">Pendiente</option>
+            <option value="En Proceso">En Proceso</option>
+            <option value="Completada">Completada</option>
+        </select>
+        <select id="persona" required>
+            <option value="Jeyson">Jeyson</option>
+            <option value="Cristian">Cristian</option>
+            <option value="Angeli">Angeli</option>
+        </select>
+        <i id="boton-enter" class="fas fa-plus-circle"></i>
+    </div>
+    
+
+    <!-- Secciones de tareas -->
+    <div id="tareas-jeyson" class="seccion-tarea" style="display: none;">
+        <h3>Tareas de Jeyson</h3>
+        <ul id="lista-jeyson"></ul>
+    </div>
+    <div id="tareas-cristian" class="seccion-tarea" style="display: none;">
+        <h3>Tareas de Cristian</h3>
+        <ul id="lista-cristian"></ul>
+    </div>
+    <div id="tareas-angeli" class="seccion-tarea" style="display: none;">
+        <h3>Tareas de Angeli</h3>
+        <ul id="lista-angeli"></ul>
+    </div>
+
+<script src="index.js"></script>
+</body>
+</html>

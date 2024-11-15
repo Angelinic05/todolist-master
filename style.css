@@ -1,0 +1,279 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+   --white: #fafafb;
+   --purple: #9a67ea;
+   --blue-light: #04d4c3;
+   --blue-dark: #2a73c2;
+   --green: #2c7b90;
+}
+
+body {
+    background: black;
+    height: 100vh;
+    font-family: 'Prompt', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: var(--purple);
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.header span {
+    color: var(--blue-dark);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+/* Estilo general del menú */
+.menu {
+    display: flex;
+    justify-content: space-between; /* Para una distribución equilibrada */
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 800px; /* Limitar el tamaño máximo */
+    margin: 0 auto; /* Centrar el menú */
+}
+
+/* Estilo de cada item del menú */
+.menu-item {
+    background-color: var(--purple);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    flex-grow: 1; /* Para que los botones se distribuyan en la misma cantidad */
+    margin: 0 8px; /* Ajustar el espacio entre botones */
+    font-size: 1rem; /* Tamaño de fuente uniforme */
+    transition: background-color 0.3s, transform 0.2s; /* Agregar transición para el hover */
+}
+
+/* Estilo para el hover */
+.menu-item:hover {
+    background-color: var(--blue-light);
+    transform: scale(1.05); /* Agrandar ligeramente al pasar el mouse */
+}
+
+/* Estilo cuando el item tiene el foco */
+.menu-item:focus {
+    outline: none;
+    box-shadow: 0 0 5px var(--blue-light); /* Añadir sombra para resaltar el foco */
+}
+
+/* Estilo para el botón activo (el seleccionado) */
+.menu-item.active {
+    background-color: var(--blue-light);
+    transform: scale(1.05); /* Agrandar ligeramente para resaltar */
+}
+
+/* Asegurarse que el diseño sea adecuado en pantallas más pequeñas */
+@media (max-width: 600px) {
+    .menu {
+        flex-direction: column; /* Disponer los botones verticalmente en pantallas pequeñas */
+        align-items: center; /* Centrar los botones en pantallas pequeñas */
+    }
+
+    .menu-item {
+        width: 100%; /* Hacer que los botones ocupen todo el ancho */
+        margin-bottom: 10px; /* Espaciado entre botones */
+    }
+}
+
+
+/* Sección de Perfil */
+.perfil {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.perfil h1 {
+    color: var(--purple);
+    font-size: 2rem;
+    margin: 10px 0;
+}
+
+.perfil span {
+    color: var(--blue-dark);
+    letter-spacing: 1px;
+    font-size: 1rem;
+}
+
+#fecha {
+    color: var(--blue-light);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+/* AGREGAR TAREA */
+.agregar-tarea {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: var(--white);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+}
+
+.agregar-tarea input,
+.agregar-tarea textarea,
+.agregar-tarea select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: var(--white);
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.agregar-tarea input::placeholder,
+.agregar-tarea textarea::placeholder {
+    font-size: 1.1rem;
+    color: var(--purple);
+}
+
+.agregar-tarea input:focus,
+.agregar-tarea textarea:focus,
+.agregar-tarea select:focus {
+    border-color: var(--blue-light);
+    box-shadow: 0 0 5px var(--blue-light);
+}
+
+.agregar-tarea i {
+    font-size: 50px;
+    color: var(--purple);
+    align-self: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.agregar-tarea i:hover {
+    transform: scale(1.1);
+}
+
+.agregar-tarea select {
+    background-color: var(--white);
+    color: var(--purple);
+}
+
+.agregar-tarea select:focus {
+    border-color: var(--blue-light);
+}
+
+/* SECCION DE TAREA */
+.seccion-tarea h3 {
+    color: var(--purple);
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.seccion-tarea ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.seccion-tarea li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: linear-gradient(to bottom, var(--blue-dark), var(--green));
+    border-radius: 10px;
+    padding: 15px;
+    color: var(--white);
+    margin: 10px 0;
+}
+
+.seccion-tarea li .tarea-info {
+    font-size: 0.9rem;
+    color: var(--white);
+    margin-top: 10px;
+}
+
+.seccion-tarea i {
+    font-size: 25px;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.seccion-tarea i:hover {
+    color: var(--blue-light);
+}
+
+.line-through {
+    text-decoration: line-through;
+    color: var(--blue-light);
+}
+
+/* Nuevos estilos para mostrar las fechas, detalles y estado */
+.seccion-tarea .fecha,
+.seccion-tarea .detalles,
+.seccion-tarea .estado {
+    font-size: 0.9rem;
+    color: var(--white);
+    margin: 5px 0;
+}
+
+.seccion-tarea .fecha {
+    color: var(--blue-light);
+}
+
+.seccion-tarea .detalles {
+    color: var(--white);
+    font-style: italic;
+}
+
+.seccion-tarea .estado {
+    color: var(--green);
+}
+
+/* Estilos para el menú */
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .agregar-tarea,
+    .seccion-tarea,
+    .menu {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .perfil h1 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Estilos para iconos */
+.fas.fa-plus-circle {
+    color: var(--blue-light);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.fas.fa-plus-circle:hover {
+    color: var(--purple);
+}
