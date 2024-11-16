@@ -95,6 +95,7 @@ botonEnter.addEventListener('click', () => {
 
 // Cambiar de vista al seleccionar el menú
 document.querySelector('#inicio').addEventListener('click', () => {
+    location.reload();
     document.getElementById('formulario').style.display = 'block'
     document.getElementById('tareas-jeyson').style.display = 'none'
     document.getElementById('tareas-cristian').style.display = 'none'

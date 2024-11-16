@@ -1,0 +1,4 @@
+gris obscuro #1e1e26
+gris claro #2a2a32
+rosado #c37dd5
+morado #7a66ec

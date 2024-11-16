@@ -6,15 +6,19 @@
 
 :root {
    --white: #fafafb;
-   --purple: #9a67ea;
+   --pink: #c37dd5;
    --blue-light: #04d4c3;
    --blue-dark: #2a73c2;
-   --green: #2c7b90;
+   --purple: #7a66ec;
+   --gris: #1e1e26;
+   --gris-claro: #2a2a32;
 }
 
 body {
-    background: black;
+    /* background: conic-gradient(from 0deg, #ff7e5f, #feb47b, #ff7e5f); */
+    background: radial-gradient(circle, #530168,#29234d);
     height: 100vh;
+    width: 100%;
     font-family: 'Prompt', sans-serif;
     display: flex;
     flex-direction: column;
@@ -29,13 +33,13 @@ body {
 }
 
 .header h1 {
-    color: var(--purple);
+    color: var(--white);
     font-size: 2.5rem;
     margin: 0;
 }
 
 .header span {
-    color: var(--blue-dark);
+    color: var(--white);
     font-size: 1.2rem;
     letter-spacing: 1px;
 }
@@ -48,16 +52,17 @@ body {
     width: 100%;
     max-width: 800px; /* Limitar el tamaño máximo */
     margin: 0 auto; /* Centrar el menú */
+    margin-bottom: 3%;
 }
 
 /* Estilo de cada item del menú */
 .menu-item {
-    background-color: var(--purple);
+    background-color: transparent;
     color: white;
     padding: 12px 20px;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 30px;
     flex-grow: 1; /* Para que los botones se distribuyan en la misma cantidad */
     margin: 0 8px; /* Ajustar el espacio entre botones */
     font-size: 1rem; /* Tamaño de fuente uniforme */
@@ -66,34 +71,17 @@ body {
 
 /* Estilo para el hover */
 .menu-item:hover {
-    background-color: var(--blue-light);
+    background: #ffffff1e;
     transform: scale(1.05); /* Agrandar ligeramente al pasar el mouse */
 }
 
 /* Estilo cuando el item tiene el foco */
 .menu-item:focus {
     outline: none;
-    box-shadow: 0 0 5px var(--blue-light); /* Añadir sombra para resaltar el foco */
+    box-shadow: 0 0 5px var(--purple); /* Añadir sombra para resaltar el foco */
 }
 
-/* Estilo para el botón activo (el seleccionado) */
-.menu-item.active {
-    background-color: var(--blue-light);
-    transform: scale(1.05); /* Agrandar ligeramente para resaltar */
-}
 
-/* Asegurarse que el diseño sea adecuado en pantallas más pequeñas */
-@media (max-width: 600px) {
-    .menu {
-        flex-direction: column; /* Disponer los botones verticalmente en pantallas pequeñas */
-        align-items: center; /* Centrar los botones en pantallas pequeñas */
-    }
-
-    .menu-item {
-        width: 100%; /* Hacer que los botones ocupen todo el ancho */
-        margin-bottom: 10px; /* Espaciado entre botones */
-    }
-}
 
 
 /* Sección de Perfil */
@@ -103,19 +91,19 @@ body {
 }
 
 .perfil h1 {
-    color: var(--purple);
+    color: var(--white);
     font-size: 2rem;
     margin: 10px 0;
 }
 
 .perfil span {
-    color: var(--blue-dark);
+    color: var(--white);
     letter-spacing: 1px;
     font-size: 1rem;
 }
 
 #fecha {
-    color: var(--blue-light);
+    color: var(--white);
     font-size: 1.1rem;
     margin-bottom: 10px;
 }
@@ -124,12 +112,13 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-color: var(--white);
+    background-color: #ffffff1e;
+    /* backdrop-filter: blur(20%);  */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.411); /* Sombra opcional */
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
+    width: 80%;
+    max-width: 2000px;
     margin: 0 auto;
     margin-bottom: 30px;
 }
@@ -140,28 +129,28 @@ body {
     width: 100%;
     padding: 14px;
     border-radius: 8px;
-    border: 1px solid #ddd;
-    background-color: var(--white);
+    border: none; /* Sin color en el borde */
+    background-color: #ffffff1e;
     font-size: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    transition: box-shadow 0.3s;
 }
 
 .agregar-tarea input::placeholder,
 .agregar-tarea textarea::placeholder {
     font-size: 1.1rem;
-    color: var(--purple);
+    color: #5e5e5e;
 }
 
 .agregar-tarea input:focus,
 .agregar-tarea textarea:focus,
 .agregar-tarea select:focus {
-    border-color: var(--blue-light);
-    box-shadow: 0 0 5px var(--blue-light);
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Sombra para indicar el foco */
 }
 
 .agregar-tarea i {
     font-size: 50px;
-    color: var(--purple);
+    color: #5e5e5e;
     align-self: center;
     cursor: pointer;
     transition: transform 0.2s;
@@ -172,12 +161,49 @@ body {
 }
 
 .agregar-tarea select {
-    background-color: var(--white);
+    background-color: #ffffff1e;
+    color: #797979;
+}
+
+/* Estilo para alinear Fecha Inicio y Fecha Fin lado a lado */
+.fechas {
+    display: flex;
+    gap: 15px;
+}
+
+#start-date, #end-date {
+    color: #797979;
+}
+
+/* Estilos para iconos */
+.fas.fa-plus-circle {
+    color: var(--pink);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.fas.fa-plus-circle:hover {
     color: var(--purple);
 }
 
-.agregar-tarea select:focus {
+/* .fecha-container input {
+    width: 50%; 
+} */
+
+
+/* .agregar-tarea select:focus {
     border-color: var(--blue-light);
+} */
+/* Estilos base */
+#lista-angeli, #lista-jeyson, #lista-cristian {
+    border: 1px solid darkcyan;
+    width: 150vh; /* Asegúrate de que no exceda el ancho del contenedor */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-auto-rows: minmax(150px, auto);
+    gap: 20px; /* Espacio entre las tarjetas */
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 /* SECCION DE TAREA */
@@ -191,17 +217,26 @@ body {
 .seccion-tarea ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 .seccion-tarea li {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background: linear-gradient(to bottom, var(--blue-dark), var(--green));
+    background: #ffffff1e;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.411);
     border-radius: 10px;
     padding: 15px;
     color: var(--white);
     margin: 10px 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.seccion-tarea li:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
 .seccion-tarea li .tarea-info {
@@ -235,7 +270,7 @@ body {
 }
 
 .seccion-tarea .fecha {
-    color: var(--blue-light);
+    color: var(--purple);
 }
 
 .seccion-tarea .detalles {
@@ -247,10 +282,51 @@ body {
     color: var(--green);
 }
 
-/* Estilos para el menú */
-
-/* Media Queries for Responsiveness */
+/* Media queries para responsividad */
 @media (max-width: 768px) {
+    #lista-angeli, #lista-jeyson, #lista-cristian {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Columnas más pequeñas */
+        gap: 15px;
+    }
+
+    .seccion-tarea h3 {
+        font-size: 1.2rem;
+    }
+
+    .seccion-tarea li {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #lista-angeli, #lista-jeyson, #lista-cristian {
+        grid-template-columns: 1fr; /* Una columna para pantallas muy pequeñas */
+    }
+
+    .seccion-tarea h3 {
+        font-size: 1rem;
+    }
+
+    .seccion-tarea li {
+        padding: 8px;
+        font-size: 0.75rem;
+    }
+
+    .seccion-tarea i {
+        font-size: 20px;
+    }
+}
+
+
+
+@media (max-width: 900px) {
+    #lista-angeli, #lista-jeyson, #lista-cristian{
+        display: flex;
+        flex-direction: column;
+        gap: 2%;
+    }
+
     .agregar-tarea,
     .seccion-tarea,
     .menu {
@@ -267,13 +343,23 @@ body {
     }
 }
 
-/* Estilos para iconos */
-.fas.fa-plus-circle {
-    color: var(--blue-light);
-    cursor: pointer;
-    transition: color 0.2s;
+
+
+
+@media (max-width: 600px) {
+    .menu {
+        flex-direction: column; /* Disponer los botones verticalmente en pantallas pequeñas */
+        align-items: center; /* Centrar los botones en pantallas pequeñas */
+    }
+
+    .menu-item {
+        width: 100%; /* Hacer que los botones ocupen todo el ancho */
+        margin-bottom: 10px; /* Espaciado entre botones */
+    }
 }
 
-.fas.fa-plus-circle:hover {
-    color: var(--purple);
-}
+/* Estilos para el menú */
+
+/* Media Queries for Responsiveness */
+
+

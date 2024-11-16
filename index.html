@@ -11,24 +11,26 @@
 <body>
     <!-- Menu de navegación -->
     <div class="menu">
-        <button id="inicio" class="menu-item">Inicio</button>
-        <button id="jeyson" class="menu-item">Jeyson</button>
-        <button id="cristian" class="menu-item">Cristian</button>
-        <button id="angeli" class="menu-item">Angeli</button>
+        <button id="inicio" class="menu-item">INICIO</button>
+        <button id="jeyson" class="menu-item">JEYSON</button>
+        <button id="cristian" class="menu-item">CRISTIAN</button>
+        <button id="angeli" class="menu-item">ANGELI</button>
     </div>
     
 
     <div class="perfil">
         <div id="fecha"></div>
         <h1>PLATAFORMAS</h1>
-        <span>Vamos a cumplir tus metas</span>
+        
     </div>
 
     <!-- Formulario para agregar tarea -->
     <div id="formulario" class="agregar-tarea">
         <input type="text" id="input" placeholder="Agregar una tarea" required>
-        <input type="date" id="start-date" placeholder="Fecha de inicio" required>
-        <input type="date" id="end-date" placeholder="Fecha de finalización" required>
+        <div class="fechas">
+            <input type="date" id="start-date" placeholder="Fecha de inicio" required>
+            <input type="date" id="end-date" placeholder="Fecha de finalización" required>
+        </div>
         <textarea id="details" placeholder="Detalles de la tarea" required></textarea>
         <select id="status" required>
             <option value="Pendiente">Pendiente</option>
