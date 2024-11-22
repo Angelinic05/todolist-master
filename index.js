@@ -59,7 +59,11 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
     } else if (persona === 'Cristian') {
         listaCristian.insertAdjacentHTML("beforeend", elemento);
     } else if (persona === 'Angeli') {
-        listaAngeli.insertAdjacentHTML("beforeend", elemento);
+        if (listaAngeli) { // Verifica que la lista de Angeli exista
+            listaAngeli.insertAdjacentHTML("beforeend", elemento);
+        } else {
+            console.error("La lista de Angeli no está disponible.");
+        }
     }
 
     // Guardar en Firebase solo si no viene de Firebase
@@ -166,6 +170,7 @@ function mostrarVista(vistaId) {
 
 function configurarEventosVistas() {
     document.querySelector('#inicio').addEventListener('click', () => {
+        location.reload();
         mostrarVista('formulario');
     });
 
@@ -221,22 +226,3 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarEventosVistas();
     cargarTareas();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
