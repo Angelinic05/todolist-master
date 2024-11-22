@@ -113,28 +113,19 @@ async function tareaRealizada(element) {
     }
 }
 async function eliminarTarea(id, persona) {
-    console.log(LIST);  // Verifica la estructura de LIST
-    console.log(`Eliminando tarea para la persona: ${persona}, ID: ${id}`);  // Verifica los datos
+    console.log(LIST);  
+    console.log(`Eliminando tarea para la persona: ${persona}, ID: ${id}`);  
 
     try {
-        // Verifica si la lista de la persona existe y contiene tareas
-        if (!LIST[persona] || LIST[persona].length === 0) {
-            console.error(`No existen tareas para la persona ${persona}`);
-            return; // Sale si no hay tareas
-        }
-
-        // Buscar la tarea en la lista usando el firebaseId
-        const tarea = LIST[persona].find(t => t.id === id);
-        console.log(`Tarea encontrada: `, tarea);  // Verifica si se encuentra la tarea
+        const tarea = LIST[persona].find(t => t.id === parseInt(id)); // Asegúrate de que se compara correctamente
+        console.log(`Tarea encontrada: `, tarea);  
 
         if (tarea) {
-            const firebaseId = tarea.firebaseId; // Asegúrate de obtener el firebaseId
-            // Eliminar de Firebase
+            const firebaseId = tarea.firebaseId; 
             await deleteDoc(doc(db, 'tareas', firebaseId));
             console.log(`Tarea con ID ${id} eliminada de Firebase`);
 
-            // Eliminar de la lista y del DOM
-            LIST[persona] = LIST[persona].filter(t => t.id !== id); // Usamos filter para eliminar por id
+            LIST[persona] = LIST[persona].filter(t => t.id !== parseInt(id)); // Usamos filter para eliminar por id
             document.getElementById(`elemento-${id}`).remove();
         } else {
             console.log(`Tarea con ID ${id} no encontrada en la lista de ${persona}`);
