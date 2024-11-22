@@ -326,6 +326,7 @@ function mostrarVista(vistaId) {
 // Configuración de eventos de las vistas
 function configurarEventosVistas() {
     document.querySelector('#inicio').addEventListener('click', () => {
+        location.reload();
         mostrarVista('formulario');
     });
 
