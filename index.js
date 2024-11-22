@@ -1,9 +1,6 @@
-
-// Importar Firebase desde CDN (esto solo es necesario si usas módulos JS)
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
 import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
 
-// Configuración de Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDgtdNs1w5bXkJT5w4ROTXb6BXt8ERKbWY",
     authDomain: "toolist-d7614.firebaseapp.com",
@@ -14,11 +11,9 @@ const firebaseConfig = {
     measurementId: "G-QKELJWTV3H"
 };
 
-// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Elementos DOM
 const fecha = document.querySelector('#fecha');
 const listaJeyson = document.querySelector('#lista-jeyson');
 const listaCristian = document.querySelector('#lista-cristian');
@@ -38,11 +33,9 @@ let LIST = {
 };
 let id = 0;
 
-// Función para actualizar la fecha
 const FECHA = new Date();
 fecha.innerHTML = FECHA.toLocaleDateString('es-MX', { weekday: 'long', month: 'short', day: 'numeric' });
 
-// Función para agregar tarea
 async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate, details, status, persona, fromFirebase = false) {
     if (eliminado) return;
 
@@ -60,7 +53,7 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
     </li>
 `;
 
-
+    // Agregar el elemento a la lista correspondiente
     if (persona === 'Jeyson') {
         listaJeyson.insertAdjacentHTML("beforeend", elemento);
     } else if (persona === 'Cristian') {
@@ -81,27 +74,22 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
                 endDate: endDate,
                 details: details,
                 status: status,
-                persona: persona
+                persona: persona // Asegúrate de que el campo persona se esté guardando
             });
             console.log("Tarea agregada a Firebase con ID:", docRef.id);
-            LIST[persona].find(t => t.id === id).firebaseId = docRef.id;
+            LIST[persona].find(t => t.id === id).firebaseId = docRef.id; // Actualiza firebaseId
         } catch (error) {
             console.error("Error agregando tarea: ", error);
         }
     }
 }
 
-
-
-
-// Función para manejar tarea realizada
 async function tareaRealizada(element) {
     element.classList.toggle('fa-check-circle');
     element.classList.toggle('fa-circle');
     element.parentNode.querySelector('.text').classList.toggle('line-through');
-    LIST[element.id].realizado = LIST[element.id].realizado ? false : true;
+    LIST[element.id].realizado = !LIST[element.id].realizado;
 
-    // Actualizar en Firebase
     const tarea = LIST[element.id];
     try {
         await updateDoc(doc(db, 'tareas', tarea.firebaseId), {
@@ -112,12 +100,13 @@ async function tareaRealizada(element) {
         console.error("Error actualizando tarea: ", error);
     }
 }
+
 async function eliminarTarea(id, persona) {
     console.log(LIST);  
     console.log(`Eliminando tarea para la persona: ${persona}, ID: ${id}`);  
 
     try {
-        const tarea = LIST[persona].find(t => t.id === parseInt(id)); // Asegúrate de que se compara correctamente
+        const tarea = LIST[persona].find(t => t.id === parseInt(id)); 
         console.log(`Tarea encontrada: `, tarea);  
 
         if (tarea) {
@@ -125,7 +114,7 @@ async function eliminarTarea(id, persona) {
             await deleteDoc(doc(db, 'tareas', firebaseId));
             console.log(`Tarea con ID ${id} eliminada de Firebase`);
 
-            LIST[persona] = LIST[persona].filter(t => t.id !== parseInt(id)); // Usamos filter para eliminar por id
+            LIST[persona] = LIST[persona].filter(t => t.id !== parseInt(id)); 
             document.getElementById(`elemento-${id}`).remove();
         } else {
             console.log(`Tarea con ID ${id} no encontrada en la lista de ${persona}`);
@@ -135,14 +124,6 @@ async function eliminarTarea(id, persona) {
     }
 }
 
-
-
-
-
-
-
-
-// Evento para agregar tarea
 botonEnter.addEventListener('click', () => {
     const tarea = input.value;
     const start = startDate.value;
@@ -151,7 +132,7 @@ botonEnter.addEventListener('click', () => {
     const taskStatus = status.value;
     const selectedPersona = persona.value;
 
-    if (tarea) {
+    if (tarea && start && end && new Date(start) <= new Date(end)) {
         agregarTarea(tarea, id, false, false, start, end, detail, taskStatus, selectedPersona);
         LIST[selectedPersona].push({
             nombre: tarea,
@@ -171,10 +152,11 @@ botonEnter.addEventListener('click', () => {
         endDate.value = '';
         details.value = '';
         status.value = 'Pendiente';
+    } else {
+        alert("Por favor, completa todos los campos correctamente.");
     }
 });
 
-// Función genérica para mostrar la vista seleccionada
 function mostrarVista(vistaId) {
     const vistas = ['formulario', 'tareas-jeyson', 'tareas-cristian', 'tareas-angeli'];
     vistas.forEach(vista => {
@@ -182,10 +164,8 @@ function mostrarVista(vistaId) {
     });
 }
 
-// Configuración de eventos de las vistas
 function configurarEventosVistas() {
     document.querySelector('#inicio').addEventListener('click', () => {
-        location.reload();
         mostrarVista('formulario');
     });
 
@@ -202,7 +182,6 @@ function configurarEventosVistas() {
     });
 }
 
-// Cargar tareas desde Firebase
 async function cargarTareas() {
     try {
         const querySnapshot = await getDocs(collection(db, 'tareas'));
@@ -210,10 +189,18 @@ async function cargarTareas() {
             const tarea = doc.data();
             const persona = tarea.persona;
 
-            // Evitar duplicados verificando si el ID ya existe en la lista
-            if (!LIST[persona].some(t => t.id === tarea.id)) {
-                LIST[persona].push({ ...tarea, firebaseId: doc.id });
-                agregarTarea(tarea.nombre, tarea.id, tarea.realizado, tarea.eliminado, tarea.startDate, tarea.endDate, tarea.details, tarea.status, tarea.persona, true); // Marcamos como tarea proveniente de Firebase
+            // Agrega un log para depurar
+            console.log("Persona obtenida de Firebase:", persona);
+
+            // Verifica que la persona sea válida
+            if (LIST[persona]) {
+                // Evitar duplicados verificando si el ID ya existe en la lista
+                if (!LIST[persona].some(t => t.id === tarea.id)) {
+                    LIST[persona].push({ ...tarea, firebaseId: doc.id });
+                    agregarTarea(tarea.nombre, tarea.id, tarea.realizado, tarea.eliminado, tarea.startDate, tarea.endDate, tarea.details, tarea.status, tarea.persona, true);
+                }
+            } else {
+                console.error(`Persona no válida: ${persona}`);
             }
         });
     } catch (error) {
@@ -221,23 +208,19 @@ async function cargarTareas() {
     }
 }
 
-
-
-// Añadir eventos para marcar tareas como realizadas o eliminadas
 document.addEventListener('click', function(event) {
     if (event.target.dataset.eliminado !== undefined) {
-        const persona = event.target.dataset.persona;  // Aquí obtenemos el valor de 'persona'
-        eliminarTarea(event.target.id, persona); // Se pasa correctamente 'persona' a la función eliminarTarea
+        const persona = event.target.dataset.persona;  
+        eliminarTarea(event.target.id, persona); 
     } else if (event.target.dataset.realizado !== undefined) {
         tareaRealizada(event.target);
     }
 });
 
-
-// Inicialización
-configurarEventosVistas();
-cargarTareas();
-
+document.addEventListener('DOMContentLoaded', () => {
+    configurarEventosVistas();
+    cargarTareas();
+});
 
 
 
