@@ -18,6 +18,7 @@ const fecha = document.querySelector('#fecha');
 const listaJeyson = document.querySelector('#lista-jeyson');
 const listaCristian = document.querySelector('#lista-cristian');
 const listaAngeli = document.querySelector('#lista-angeli');
+const listaSilvia = document.querySelector('#lista-silvia');
 const input = document.querySelector('#input');
 const startDate = document.querySelector('#start-date');
 const endDate = document.querySelector('#end-date');
@@ -29,7 +30,8 @@ const botonEnter = document.querySelector('#boton-enter');
 let LIST = {
     Jeyson: [],
     Cristian: [],
-    Angeli: []
+    Angeli: [],
+    Silvia: []
 };
 let id = 0;
 
@@ -51,7 +53,7 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
         <p class="estado">${status}</p>
         <i class="fas fa-trash de" data-eliminado data-persona="${persona}" id="${id}"></i> 
     </li>
-`;
+    `;
 
     // Agregar el elemento a la lista correspondiente
     if (persona === 'Jeyson') {
@@ -59,11 +61,9 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
     } else if (persona === 'Cristian') {
         listaCristian.insertAdjacentHTML("beforeend", elemento);
     } else if (persona === 'Angeli') {
-        if (listaAngeli) { // Verifica que la lista de Angeli exista
-            listaAngeli.insertAdjacentHTML("beforeend", elemento);
-        } else {
-            console.error("La lista de Angeli no está disponible.");
-        }
+        listaAngeli.insertAdjacentHTML("beforeend", elemento);
+    } else if (persona === 'Silvia') {
+        listaSilvia.insertAdjacentHTML("beforeend", elemento);
     }
 
     // Guardar en Firebase solo si no viene de Firebase
@@ -78,7 +78,7 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
                 endDate: endDate,
                 details: details,
                 status: status,
-                persona: persona // Asegúrate de que el campo persona se esté guardando
+                persona: persona
             });
             console.log("Tarea agregada a Firebase con ID:", docRef.id);
             LIST[persona].find(t => t.id === id).firebaseId = docRef.id; // Actualiza firebaseId
@@ -96,7 +96,7 @@ async function tareaRealizada(element) {
 
     const tarea = LIST[element.id];
     try {
-        await updateDoc(doc(db, 'tareas', tarea.firebaseId), {
+        await updateDoc(doc(db, ' tareas', tarea.firebaseId), {
             realizado: tarea.realizado
         });
         console.log("Tarea actualizada en Firebase");
@@ -137,7 +137,7 @@ botonEnter.addEventListener('click', () => {
     const selectedPersona = persona.value;
 
     if (tarea && start && end && new Date(start) <= new Date(end)) {
-        agregarTarea(tarea, id, false, false, start, end, detail, taskStatus, selectedPersona);
+        agregarTarea(tarea, id, false, false, start, end, detail, taskStatus, selectedPersona, false);
         LIST[selectedPersona].push({
             nombre: tarea,
             id: id,
@@ -162,7 +162,7 @@ botonEnter.addEventListener('click', () => {
 });
 
 function mostrarVista(vistaId) {
-    const vistas = ['formulario', 'tareas-jeyson', 'tareas-cristian', 'tareas-angeli'];
+    const vistas = ['formulario', 'tareas-jeyson', 'tareas-cristian', 'tareas-angeli', 'tareas-silvia'];
     vistas.forEach(vista => {
         document.getElementById(vista).style.display = (vista === vistaId) ? 'block' : 'none';
     });
@@ -185,6 +185,9 @@ function configurarEventosVistas() {
     document.querySelector('#angeli').addEventListener('click', () => {
         mostrarVista('tareas-angeli');
     });
+    document.querySelector('#silvia').addEventListener('click', () => {
+        mostrarVista('tareas-silvia');
+    });
 }
 
 async function cargarTareas() {
@@ -194,12 +197,9 @@ async function cargarTareas() {
             const tarea = doc.data();
             const persona = tarea.persona;
 
-            // Agrega un log para depurar
             console.log("Persona obtenida de Firebase:", persona);
 
-            // Verifica que la persona sea válida
             if (LIST[persona]) {
-                // Evitar duplicados verificando si el ID ya existe en la lista
                 if (!LIST[persona].some(t => t.id === tarea.id)) {
                     LIST[persona].push({ ...tarea, firebaseId: doc.id });
                     agregarTarea(tarea.nombre, tarea.id, tarea.realizado, tarea.eliminado, tarea.startDate, tarea.endDate, tarea.details, tarea.status, tarea.persona, true);
