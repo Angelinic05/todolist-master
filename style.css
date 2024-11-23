@@ -6,17 +6,19 @@
 
 :root {
    --white: #fafafb;
-   --pink: #c37dd5;
-   --blue-light: #04d4c3;
-   --blue-dark: #2a73c2;
-   --purple: #7a66ec;
-   --gris: #1e1e26;
-   --gris-claro: #2a2a32;
+   --pink: #fc93d5;
+   --blue: #270d64;
+   --gris: #10113d;
+   --black: #000000;
 }
+
+/* #de3768 rosa
+#6b3799 morado
+#1a2427 gris */
 
 body {
     /* background: conic-gradient(from 0deg, #ff7e5f, #feb47b, #ff7e5f); */
-    background: radial-gradient(circle, #530168,#29234d);
+    background-color: var(--gris);
     /* height: 100vh;
     width: 100%; */
     font-family: 'Prompt', sans-serif;
@@ -71,14 +73,14 @@ body {
 
 /* Estilo para el hover */
 .menu-item:hover {
-    background: #ffffff1e;
+    background: var(--blue);
     transform: scale(1.05); /* Agrandar ligeramente al pasar el mouse */
 }
 
 /* Estilo cuando el item tiene el foco */
 .menu-item:focus {
     outline: none;
-    box-shadow: 0 0 5px var(--purple); /* Añadir sombra para resaltar el foco */
+    box-shadow: 0 0 5px var(--blue); /* Añadir sombra para resaltar el foco */
 }
 
 
@@ -182,7 +184,7 @@ body {
 
 .fas.fa-plus-circle:hover {
     color: var(--purple);
-}
+}   
 
 /* .fecha-container input {
     width: 50%; 
@@ -231,10 +233,10 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.seccion-tarea li:hover {
+/* .seccion-tarea li:hover {
     transform: scale(1.02);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-}
+} */
 
 #lista-jeyson ul li, #lista-angeli ul li, #lista-cristian ul li, #lista-silvia ul li{
     width: 46vh;
@@ -290,7 +292,9 @@ body {
     justify-content: center;
 }
 #add-checklist-item{
-    background-color: var(--pink);
+    width: 15%;
+    background: var(--pink);
+    border: none;
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
