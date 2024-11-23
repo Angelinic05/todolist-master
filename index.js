@@ -45,9 +45,43 @@ addChecklistButton.addEventListener('click', function() {
     const itemText = checklistInput.value.trim();
     if (itemText) {
         const listItem = document.createElement('li');
-        listItem.textContent = itemText;
+        listItem.classList.add('checklist-item');
+
+        // Crear un checkbox
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.classList.add('checklist-checkbox');
+
+        // Crear un span para el círculo
+        const circle = document.createElement('span');
+        circle.classList.add('checklist-circle');
+
+        // Agregar un evento para marcar el ítem como completado
+        checkbox.addEventListener('change', function() {
+            if (checkbox.checked) {
+                listItem.querySelector('.checklist-text').classList.add('completed');
+            } else {
+                listItem.querySelector('.checklist-text').classList.remove('completed');
+            }
+        });
+
+        // Agregar un evento de clic al círculo para alternar el checkbox
+        circle.addEventListener('click', function() {
+            checkbox.checked = !checkbox.checked; // Alternar el estado del checkbox
+            checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio
+        });
+
+        // Crear un span para el texto del ítem
+        const textSpan = document.createElement('span');
+        textSpan.classList.add('checklist-text');
+        textSpan.textContent = itemText;
+
+        // Agregar el checkbox, el círculo y el texto al listItem
+        listItem.appendChild(checkbox);
+        listItem.appendChild(circle);
+        listItem.appendChild(textSpan);
         checklistItemsList.appendChild(listItem);
-        checklistInput.value = ''; // Clear the input field
+        checklistInput.value = ''; // Limpiar el campo de entrada
     }
 });
 
@@ -58,7 +92,13 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
     const LINE = realizado ? 'line-through' : '';
 
     // Convertir los ítems del checklist en una lista HTML
-    const checklistHTML = checklistItems.map(item => `<li>${item}</li>`).join('');
+    const checklistHTML = checklistItems.map(item => `
+        <li class="checklist-item">
+            <input type="checkbox" class="checklist-checkbox" ${realizado ? 'checked' : ''}>
+            <span class="checklist-circle"></span>
+            <span class="checklist-text">${item}</span>
+        </li>
+    `).join('');
 
     const elemento = `
     <li id="elemento-${id}">
@@ -104,6 +144,30 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
             console.error("Error agregando tarea: ", error);
         }
     }
+
+    // Agregar eventos a los checkboxes de la tarea
+    const checkboxes = document.querySelectorAll(`#elemento-${id} .checklist-checkbox`);
+    checkboxes.forEach((checkbox, index) => {
+        checkbox.addEventListener('change', function() {
+            if (checkbox.checked) {
+                checkbox.nextElementSibling.classList.add('completed');
+            } else {
+                checkbox.nextElementSibling.classList.remove('completed');
+            }
+        });
+
+        // Agregar evento al círculo para alternar el checkbox
+        const circle = checkbox.nextElementSibling;
+        circle.addEventListener('click', function() {
+            checkbox.checked = !checkbox.checked; // Alternar el estado del checkbox
+            checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio
+        });
+
+        // Inicializar el estado del checkbox
+        if (checkbox.checked) {
+            checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio si está marcado
+        }
+    });
 }
 
 async function tareaRealizada(element) {

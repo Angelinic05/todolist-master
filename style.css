@@ -175,6 +175,74 @@ body {
     color: #797979;
 }
 
+
+
+#checklist-section{
+    display: flex;
+    gap: 20px;
+    border-radius: 10px;
+    justify-content: center;
+}
+
+#add-checklist-item{
+    width: 15%;
+    background: var(--pink);
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+#add-checklist-item:hover {
+    background-color: var(--purple);
+}
+
+.checklist-item {
+    background-color: #ffffff1e;
+    padding: 14px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ffffff1e;
+    gap: 10px; /* Espacio entre el checkbox y el texto */
+}
+
+.checklist-checkbox {
+    display: none; /* Ocultar el checkbox original */
+}
+
+.checklist-circle {
+    width: 20px; /* Ancho del círculo */
+    height: 20px; /* Alto del círculo */
+    border: 2px solid var(--pink); /* Color del borde */
+    border-radius: 50%; /* Hacerlo circular */
+    display: inline-block; /* Mostrar como un bloque en línea */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el círculo */
+    position: relative; /* Para posicionar el check dentro del círculo */
+}
+
+.checklist-checkbox:checked + .checklist-circle {
+    background-color: var(--pink); /* Color de fondo cuando está marcado */
+}
+
+.checklist-checkbox:checked + .checklist-circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px; /* Ancho del check */
+    height: 10px; /* Alto del check */
+    background-color: white; /* Color del check */
+    border-radius: 50%; /* Hacerlo circular */
+    transform: translate(-50%, -50%); /* Centrar el check dentro del círculo */
+}
+
+.completed {
+    text-decoration: line-through; /* Tachar el texto */
+    color: gray; /* Cambiar el color del texto */
+}
+
 /* Estilos para iconos */
 .fas.fa-plus-circle {
     color: var(--pink);
@@ -195,7 +263,7 @@ body {
     border-color: var(--blue-light);
 } */
 /* Estilos base */
-#lista-angeli, #lista-jeyson, #lista-cristian {
+#lista-angeli, #lista-jeyson, #lista-cristian, #lista-silvia {
     max-width: 180vh; 
     display: flex;
     flex-wrap: wrap;
@@ -239,6 +307,10 @@ body {
 } */
 
 #lista-jeyson ul li, #lista-angeli ul li, #lista-cristian ul li, #lista-silvia ul li{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2%;
     width: 46vh;
     border: 1px solid rgb(255, 255, 255); 
 }
@@ -285,34 +357,13 @@ body {
 .seccion-tarea .estado {
     color: var(--green);
 }
-#checklist-section{
-    display: flex;
-    gap: 20px;
-    border-radius: 10px;
-    justify-content: center;
-}
-#add-checklist-item{
-    width: 15%;
-    background: var(--pink);
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: color 0.2s;
-}
+/* 
+.seccion-tarea #lista-jeyson ul li{
+    border: 1px solid darkcyan;
+} */
 
-#add-checklist-item:hover {
-    background-color: var(--purple);
-}
 
-#checklist-items{
-    padding: 10px;
-    background-color: #ffffff1e;
-    list-style: none;
-    color: #fafafb;
-    border-radius: 8px;
-    min-height: 7vh;
-}
+
 /* @media (max-width: 1200px) {
     #lista-angeli, #lista-jeyson, #lista-cristian {
         border: 1px solid darkcyan;
@@ -323,7 +374,7 @@ body {
 
 
 @media (max-width: 900px) {
-    #lista-angeli, #lista-jeyson, #lista-cristian{
+    #lista-angeli, #lista-jeyson, #lista-cristian, #lista-silvia{
         display: flex;
         flex-wrap: wrap;
         gap: 2%;
@@ -348,7 +399,7 @@ body {
 
 /* Media queries para responsividad */
 @media (max-width: 768px) {
-    #lista-angeli, #lista-jeyson, #lista-cristian {
+    #lista-angeli, #lista-jeyson, #lista-cristian, #lista-silvia {
         grid-template-columns: 1fr; /* Una sola columna */
         gap: 10px;
     }
@@ -372,6 +423,13 @@ body {
 
 
 @media (max-width: 600px) {
+    body{
+        overflow: hidden;
+    }
+    #lista-jeyson ul li, #lista-angeli ul li, #lista-cristian ul li, #lista-silvia ul li{
+        width: 37vh;
+    }
+
     .menu {
         flex-direction: column; /* Disponer los botones verticalmente en pantallas pequeñas */
         align-items: center; /* Centrar los botones en pantallas pequeñas */
@@ -391,6 +449,9 @@ body {
 
 
 @media (max-width: 480px) {
+    #lista-jeyson ul li, #lista-angeli ul li, #lista-cristian ul li, #lista-silvia ul li{
+        width: 30vh;
+    }
     .seccion-tarea {
         padding: 10px;
     }
