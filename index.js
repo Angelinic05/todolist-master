@@ -26,6 +26,9 @@ const details = document.querySelector('#details');
 const status = document.querySelector('#status');
 const persona = document.querySelector('#persona');
 const botonEnter = document.querySelector('#boton-enter');
+const addChecklistButton = document.getElementById('add-checklist-item');
+const checklistInput = document.getElementById('checklist-item');
+const checklistItemsList = document.getElementById('checklist-items');
 
 let LIST = {
     Jeyson: [],
@@ -38,19 +41,33 @@ let id = 0;
 const FECHA = new Date();
 fecha.innerHTML = FECHA.toLocaleDateString('es-MX', { weekday: 'long', month: 'short', day: 'numeric' });
 
-async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate, details, status, persona, fromFirebase = false) {
+addChecklistButton.addEventListener('click', function() {
+    const itemText = checklistInput.value.trim();
+    if (itemText) {
+        const listItem = document.createElement('li');
+        listItem.textContent = itemText;
+        checklistItemsList.appendChild(listItem);
+        checklistInput.value = ''; // Clear the input field
+    }
+});
+
+async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate, details, status, persona, checklistItems = [], fromFirebase = false) {
     if (eliminado) return;
 
     const REALIZADO = realizado ? 'fa-check-circle' : 'fa-circle';
     const LINE = realizado ? 'line-through' : '';
 
+    // Convertir los ítems del checklist en una lista HTML
+    const checklistHTML = checklistItems.map(item => `<li>${item}</li>`).join('');
+
     const elemento = `
     <li id="elemento-${id}">
         <i class="far ${REALIZADO}" data="realizado" id="${id}"></i>
-        <p class="text ${LINE}">${tarea}</p>
         <p class="fecha">Desde: ${startDate} Hasta: ${endDate}</p>
+        <p class="text ${LINE}">${tarea}</p>
         <p class="detalles">${details}</p>
         <p class="estado">${status}</p>
+        <ul>${checklistHTML}</ul> 
         <i class="fas fa-trash de" data-eliminado data-persona="${persona}" id="${id}"></i> 
     </li>
     `;
@@ -78,7 +95,8 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
                 endDate: endDate,
                 details: details,
                 status: status,
-                persona: persona
+                persona: persona,
+                checklist: checklistItems
             });
             console.log("Tarea agregada a Firebase con ID:", docRef.id);
             LIST[persona].find(t => t.id === id).firebaseId = docRef.id; // Actualiza firebaseId
@@ -136,8 +154,10 @@ botonEnter.addEventListener('click', () => {
     const taskStatus = status.value;
     const selectedPersona = persona.value;
 
+    const checklistItems = Array.from(checklistItemsList.children).map(item => item.textContent);
+
     if (tarea && start && end && new Date(start) <= new Date(end)) {
-        agregarTarea(tarea, id, false, false, start, end, detail, taskStatus, selectedPersona, false);
+        agregarTarea(tarea, id, false, false, start, end, detail, taskStatus, selectedPersona, checklistItems, false);
         LIST[selectedPersona].push({
             nombre: tarea,
             id: id,
@@ -147,6 +167,7 @@ botonEnter.addEventListener('click', () => {
             endDate: end,
             details: detail,
             status: taskStatus,
+            checklist: checklistItems,
             firebaseId: null
         });
         localStorage.setItem('TODO', JSON.stringify(LIST));
@@ -156,6 +177,7 @@ botonEnter.addEventListener('click', () => {
         endDate.value = '';
         details.value = '';
         status.value = 'Pendiente';
+        checklistItemsList.innerHTML = '';
     } else {
         alert("Por favor, completa todos los campos correctamente.");
     }
@@ -202,7 +224,7 @@ async function cargarTareas() {
             if (LIST[persona]) {
                 if (!LIST[persona].some(t => t.id === tarea.id)) {
                     LIST[persona].push({ ...tarea, firebaseId: doc.id });
-                    agregarTarea(tarea.nombre, tarea.id, tarea.realizado, tarea.eliminado, tarea.startDate, tarea.endDate, tarea.details, tarea.status, tarea.persona, true);
+                    agregarTarea(tarea.nombre, tarea.id, tarea.realizado, tarea.eliminado, tarea.startDate, tarea.endDate, tarea.details, tarea.status, tarea.persona,tarea.checklist, true);
                 }
             } else {
                 console.error(`Persona no válida: ${persona}`);

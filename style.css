@@ -87,13 +87,12 @@ body {
 /* Sección de Perfil */
 .perfil {
     text-align: center;
-    margin-bottom: 30px;
 }
 
 .perfil h1 {
     color: var(--white);
     font-size: 2rem;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .perfil span {
@@ -112,9 +111,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-color: #ffffff1e;
-    /* backdrop-filter: blur(20%);  */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.411); /* Sombra opcional */
+    /* background-color: #ffffff1e;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.411); */
     padding: 25px;
     border-radius: 15px;
     width: 80%;
@@ -196,7 +194,6 @@ body {
 } */
 /* Estilos base */
 #lista-angeli, #lista-jeyson, #lista-cristian {
-    border: 1px solid darkcyan;
     max-width: 180vh; 
     display: flex;
     flex-wrap: wrap;
@@ -221,7 +218,7 @@ body {
 }
 
 .seccion-tarea li {
-    width: 35vh;
+    width: 50vh;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -237,6 +234,11 @@ body {
 .seccion-tarea li:hover {
     transform: scale(1.02);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+#lista-jeyson ul li, #lista-angeli ul li, #lista-cristian ul li, #lista-silvia ul li{
+    width: 46vh;
+    border: 1px solid rgb(255, 255, 255); 
 }
 
 .seccion-tarea li .tarea-info {
@@ -281,8 +283,32 @@ body {
 .seccion-tarea .estado {
     color: var(--green);
 }
+#checklist-section{
+    display: flex;
+    gap: 20px;
+    border-radius: 10px;
+    justify-content: center;
+}
+#add-checklist-item{
+    background-color: var(--pink);
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
 
+#add-checklist-item:hover {
+    background-color: var(--purple);
+}
 
+#checklist-items{
+    padding: 10px;
+    background-color: #ffffff1e;
+    list-style: none;
+    color: #fafafb;
+    border-radius: 8px;
+    min-height: 7vh;
+}
 /* @media (max-width: 1200px) {
     #lista-angeli, #lista-jeyson, #lista-cristian {
         border: 1px solid darkcyan;
