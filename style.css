@@ -424,7 +424,7 @@ body {
 
 @media (max-width: 600px) {
     body{
-        overflow: hidden;
+        overflow-x: hidden;
     }
     #lista-jeyson ul li, #lista-angeli ul li, #lista-cristian ul li, #lista-silvia ul li{
         width: 37vh;
