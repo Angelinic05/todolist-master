@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, onSnapshot } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDgtdNs1w5bXkJT5w4ROTXb6BXt8ERKbWY",
@@ -56,21 +56,6 @@ addChecklistButton.addEventListener('click', function() {
         const circle = document.createElement('span');
         circle.classList.add('checklist-circle');
 
-        // Agregar un evento para marcar el ítem como completado
-        checkbox.addEventListener('change', function() {
-            if (checkbox.checked) {
-                listItem.querySelector('.checklist-text').classList.add('completed');
-            } else {
-                listItem.querySelector('.checklist-text').classList.remove('completed');
-            }
-        });
-
-        // Agregar un evento de clic al círculo para alternar el checkbox
-        circle.addEventListener('click', function() {
-            checkbox.checked = !checkbox.checked; // Alternar el estado del checkbox
-            checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio
-        });
-
         // Crear un span para el texto del ítem
         const textSpan = document.createElement('span');
         textSpan.classList.add('checklist-text');
@@ -94,9 +79,9 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
     // Convertir los ítems del checklist en una lista HTML
     const checklistHTML = checklistItems.map(item => `
         <li class="checklist-item">
-            <input type="checkbox" class="checklist-checkbox" ${realizado ? 'checked' : ''}>
+            <input type="checkbox" class="checklist-checkbox" ${item.realizado ? 'checked' : ''}>
             <span class="checklist-circle"></span>
-            <span class="checklist-text">${item}</span>
+            <span class="checklist-text">${item.text}</span>
         </li>
     `).join('');
 
@@ -146,28 +131,47 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
     }
 
     // Agregar eventos a los checkboxes de la tarea
-    const checkboxes = document.querySelectorAll(`#elemento-${id} .checklist-checkbox`);
-    checkboxes.forEach((checkbox, index) => {
-        checkbox.addEventListener('change', function() {
-            if (checkbox.checked) {
-                checkbox.nextElementSibling.classList.add('completed');
-            } else {
-                checkbox.nextElementSibling.classList.remove('completed');
+ // Agregar eventos a los checkboxes de la tarea
+const checkboxes = document.querySelectorAll(`#elemento-${id} .checklist-checkbox`);
+checkboxes.forEach((checkbox, index) => {
+    const circle = checkbox.nextElementSibling; // Obtener el círculo correspondiente
+
+    // Evento para el círculo
+    circle.addEventListener('click', function() {
+        checkbox.checked = !checkbox.checked; // Alternar el estado del checkbox
+        checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio
+    });
+
+    checkbox.addEventListener('change', async function() {
+        // Actualizar el estado local
+        checklistItems[index].realizado = checkbox.checked; 
+
+        // Actualizar en Firebase
+        if (tarea.firebaseId) {
+            try {
+                await updateDoc(doc(db, 'tareas', tarea.firebaseId), {
+                    checklist: checklistItems // Asegúrate de que esto esté bien estructurado
+                });
+                console.log("Checklist actualizado en Firebase");
+            } catch (error) {
+                console.error("Error actualizando checklist en Firebase: ", error);
             }
-        });
+        }
 
-        // Agregar evento al círculo para alternar el checkbox
-        const circle = checkbox.nextElementSibling;
-        circle.addEventListener('click', function() {
-            checkbox.checked = !checkbox.checked; // Alternar el estado del checkbox
-            checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio
-        });
-
-        // Inicializar el estado del checkbox
+        // Cambiar el estilo del texto según el estado del checkbox
         if (checkbox.checked) {
-            checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio si está marcado
+            circle.classList.add('completed');
+        } else {
+            circle.classList.remove('completed');
         }
     });
+
+    // Inicializar el estado del checkbox
+    if (checklistItems[index].realizado) {
+        checkbox.checked = true; // Marcar como checked si está realizado
+        checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio
+    }
+});
 }
 
 async function tareaRealizada(element) {
@@ -218,7 +222,11 @@ botonEnter.addEventListener('click', () => {
     const taskStatus = status.value;
     const selectedPersona = persona.value;
 
-    const checklistItems = Array.from(checklistItemsList.children).map(item => item.textContent);
+    // Al agregar un item al checklist
+    const checklistItems = Array.from(checklistItemsList.children).map(item => ({
+        text: item.textContent,
+        realizado: item.querySelector('.checklist-checkbox').checked // Guardar el estado del checkbox
+    }));
 
     if (tarea && start && end && new Date(start) <= new Date(end)) {
         agregarTarea(tarea, id, false, false, start, end, detail, taskStatus, selectedPersona, checklistItems, false);
@@ -283,17 +291,88 @@ async function cargarTareas() {
             const tarea = doc.data();
             const persona = tarea.persona;
 
-            console.log("Persona obtenida de Firebase:", persona);
-
             if (LIST[persona]) {
                 if (!LIST[persona].some(t => t.id === tarea.id)) {
-                    LIST[persona].push({ ...tarea, firebaseId: doc.id });
-                    agregarTarea(tarea.nombre, tarea.id, tarea.realizado, tarea.eliminado, tarea.startDate, tarea.endDate, tarea.details, tarea.status, tarea.persona,tarea.checklist, true);
+                    const checklistItems = tarea.checklist.map(item => ({
+                        text: item.text,
+                        realizado: item.realizado
+                    }));
+
+                    LIST[persona].push({ ...tarea, checklist: checklistItems, firebaseId: doc.id });
+                    agregarTarea(tarea.nombre, tarea.id, tarea.realizado, tarea.eliminado, tarea.startDate, tarea.endDate, tarea.details, tarea.status, tarea.persona, checklistItems, true);
                 }
             } else {
                 console.error(`Persona no válida: ${persona}`);
             }
         });
+
+        Object.keys(LIST).forEach(persona => {
+            LIST[persona].forEach(tarea => {
+                onSnapshot(doc(db, 'tareas', tarea.firebaseId), (doc) => {
+                    const data = doc.data();
+                    const checklistItems = data.checklist.map(item => ({
+                        text: item.text,
+                        realizado: item.realizado
+                    }));
+        
+                    // Actualiza la tarea en la UI
+                    const elemento = document.getElementById(`elemento-${data.id}`);
+                    if (elemento) {
+                        const checklistContainer = elemento.querySelector('ul'); // Asegúrate de que esto apunte al contenedor correcto
+                        checklistContainer.innerHTML = checklistItems.map(item => `
+                            <li class="checklist-item">
+                                <input type="checkbox" class="checklist-checkbox" ${item.realizado ? 'checked' : ''}>
+                                <span class="checklist-circle"></span>
+                                <span class="checklist-text">${item.text}</span>
+                            </li>
+                        `).join('');
+        
+                        // Reasignar eventos a los checkboxes
+                        const checkboxes = checklistContainer.querySelectorAll('.checklist-checkbox');
+                        checkboxes.forEach((checkbox, index) => {
+                            const circle = checkbox.nextElementSibling;
+        
+                            // Evento para el círculo
+                            circle.addEventListener('click', function() {
+                                checkbox.checked = !checkbox.checked;
+                                checkbox.dispatchEvent(new Event('change'));
+                            });
+        
+                            checkbox.addEventListener('change', async function() {
+                                checklistItems[index].realizado = checkbox.checked;
+        
+                                if (tarea.firebaseId) {
+                                    try {
+                                        await updateDoc(doc(db, 'tareas', tarea.firebaseId), {
+                                            checklist: checklistItems
+                                        });
+                                    } catch (error) {
+                                        console.error("Error actualizando checklist en Firebase: ", error);
+                                    }
+                                }
+        
+                                // Cambiar el estilo del círculo según el estado del checkbox
+                                if (checkbox.checked) {
+                                    circle.classList.add('completed');
+                                } else {
+                                    circle.classList.remove('completed');
+                                }
+                            });
+        
+                            // Inicializar el estado del checkbox
+                            if (checklistItems[index].realizado) {
+                                checkbox.checked = true; // Marcar como checked si está realizado
+                                checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio
+                            }
+                        });
+                    } else {
+                        console.error(`Elemento con ID elemento-${data.id} no encontrado.`);
+                    }
+                });
+            });
+        });
+    
+
     } catch (error) {
         console.error("Error al cargar tareas: ", error);
     }
