@@ -108,6 +108,20 @@ body {
     font-size: 1.1rem;
     margin-bottom: 10px;
 }
+
+
+.container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual tamaño */
+    gap: 10px; /* Espacio entre columnas */
+}
+
+.columna{
+    border: 1px solid darkgoldenrod;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual tamaño */
+    gap: 10px; /* Espacio entre columnas */
+}
 /* AGREGAR TAREA */
 .agregar-tarea {
     display: flex;
@@ -273,9 +287,14 @@ body {
     box-sizing: border-box;
 }
 
+#lista-angeli li, #lista-jeyson li, #lista-cristian li, #lista-silvia li{
+    height: 100%;
+
+}
+
 /* SECCION DE TAREA */
 .seccion-tarea h3 {
-    color: var(--purple);
+    color: var(--white);
     font-size: 1.5rem;
     margin-bottom: 20px;
     text-align: center;
@@ -315,6 +334,8 @@ body {
     border: 1px solid rgb(255, 255, 255); 
 }
 
+
+
 .seccion-tarea li .tarea-info {
     font-size: 0.9rem;
     color: var(--white);
@@ -322,7 +343,7 @@ body {
 }
 
 .seccion-tarea i {
-    font-size: 25px;
+    font-size: 5em;
     align-self: flex-end;
     cursor: pointer;
 }
@@ -340,7 +361,7 @@ body {
 .seccion-tarea .fecha,
 .seccion-tarea .detalles,
 .seccion-tarea .estado {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--white);
     margin: 5px 0;
 }
@@ -351,7 +372,7 @@ body {
 
 .seccion-tarea .detalles {
     color: var(--white);
-    font-style: italic;
+    /* font-style: italic; */
 }
 
 .seccion-tarea .estado {
@@ -359,7 +380,7 @@ body {
 }
 
 .seccion-tarea i {
-    font-size: 25px;
+    font-size: 0.8rem;
     align-self: flex-end;
     cursor: pointer;
     margin-right: 10px; /* Espacio entre el ícono y el texto */

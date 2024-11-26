@@ -23,7 +23,6 @@
     <div class="perfil">
         <div id="fecha"></div>
         <h1>PLATAFORMAS</h1>
-        
     </div>
 
     <!-- Formulario para agregar tarea -->
@@ -52,25 +51,28 @@
         </select>
         <i id="boton-enter" class="fas fa-plus-circle"></i>
     </div>
-    
+
+
+        
+        <div id="tareas-jeyson" class="seccion-tarea" style="display: none;">
+            <h3>JEYSON</h3>
+                <ul id="lista-jeyson"></ul>
+        </div>
+        <div id="tareas-cristian" class="seccion-tarea" style="display: none;">
+            <h3>CRISTIAN</h3>
+            <ul id="lista-cristian"></ul>
+        </div>
+        <div id="tareas-angeli" class="seccion-tarea" style="display: none;">
+            <h3>ANGELI</h3>
+            <ul id="lista-angeli"></ul>
+        </div>
+        <div id="tareas-silvia" class="seccion-tarea" style="display: none;">
+            <h3>SILVIA</h3>
+            <ul id="lista-silvia"></ul>
+        </div>
 
     <!-- Secciones de tareas -->
-    <div id="tareas-jeyson" class="seccion-tarea" style="display: none;">
-        <h3>JEYSON</h3>
-            <ul id="lista-jeyson"></ul>
-    </div>
-    <div id="tareas-cristian" class="seccion-tarea" style="display: none;">
-        <h3>CRISTIAN</h3>
-        <ul id="lista-cristian"></ul>
-    </div>
-    <div id="tareas-angeli" class="seccion-tarea" style="display: none;">
-        <h3>ANGELI</h3>
-        <ul id="lista-angeli"></ul>
-    </div>
-    <div id="tareas-silvia" class="seccion-tarea" style="display: none;">
-        <h3>SILVIA</h3>
-        <ul id="lista-silvia"></ul>
-    </div>
+   
 
 
 
@@ -113,6 +115,7 @@
 
     <script type="module" src="index.js"></script>
     <script>
+
         function cerrarModal() {
         document.getElementById('modal-editar').style.display = 'none';
         document.reload();

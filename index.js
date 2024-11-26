@@ -89,8 +89,8 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
     const elemento = `
     <li id="elemento-${id}">
         <i class="fas fa-pencil-alt" data="editar" id="${id}"></i>
-        <p class="fecha">Desde: ${startDate} Hasta: ${endDate}</p>
         <p class="text ${LINE}">${tarea}</p>
+        <p class="fecha"> <b>Desde:</b> ${startDate} <b>Hasta:</b> ${endDate}</p>
         <p class="detalles">${details}</p>
         <p class="estado">${status}</p>
         <ul>${checklistHTML}</ul> 
