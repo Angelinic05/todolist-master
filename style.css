@@ -110,17 +110,26 @@ body {
 }
 
 
-.container{
+.tareas-container{
+    width: 100%;
+    min-width: 180vh;
+    min-height: 60vh;
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual tamaño */
     gap: 10px; /* Espacio entre columnas */
 }
 
-.columna{
-    border: 1px solid darkgoldenrod;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual tamaño */
-    gap: 10px; /* Espacio entre columnas */
+.tareas-container h2{
+    color: var(--white);
+    text-align: center;
+    border-bottom: 0.1px solid var(--white);
+}
+
+.tarea-columna{
+    padding: 3%;
+    border: 1px solid rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
 }
 /* AGREGAR TAREA */
 .agregar-tarea {
@@ -277,20 +286,41 @@ body {
     border-color: var(--blue-light);
 } */
 /* Estilos base */
-#lista-angeli, #lista-jeyson, #lista-cristian, #lista-silvia {
+#lista-pendientes-angeli, #lista-pendientes-jeyson, #lista-pendientes-cristian, #lista-pendientes-silvia,
+#lista-progreso-angeli, #lista-progreso-jeyson, #lista-progreso-cristian, #lista-progreso-silvia,
+#lista-completadas-angeli, #lista-completadas-jeyson, #lista-completadas-cristian, #lista-completadas-silvia{
     max-width: 180vh; 
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px; 
+    gap: 10px; 
     padding: 10px;
     box-sizing: border-box;
 }
 
-#lista-angeli li, #lista-jeyson li, #lista-cristian li, #lista-silvia li{
-    height: 100%;
 
+#lista-pendientes-jeyson .checklist-item,
+#lista-progreso-jeyson .checklist-item,
+#lista-completadas-jeyson .checklist-item, 
+#lista-pendientes-cristian .checklist-item,
+#lista-progreso-cristian .checklist-item,
+#lista-completadas-cristian .checklist-item, 
+#lista-pendientes-angeli .checklist-item,
+#lista-progreso-angeli .checklist-item,
+#lista-completadas-angeli .checklist-item, 
+#lista-pendientes-silvia .checklist-item,
+#lista-progreso-silvia .checklist-item,
+#lista-completadas-silvia .checklist-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2%;
+    width: 46vh;
+    border: 1px solid rgb(255, 255, 255); 
 }
+
+
+
 
 /* SECCION DE TAREA */
 .seccion-tarea h3 {
@@ -318,20 +348,6 @@ body {
     color: var(--white);
     margin: 10px 0;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* .seccion-tarea li:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-} */
-
-#lista-jeyson ul li, #lista-angeli ul li, #lista-cristian ul li, #lista-silvia ul li{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 2%;
-    width: 46vh;
-    border: 1px solid rgb(255, 255, 255); 
 }
 
 

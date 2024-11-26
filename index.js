@@ -100,13 +100,37 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
 
     // Agregar el elemento a la lista correspondiente
     if (persona === 'Jeyson') {
-        listaJeyson.insertAdjacentHTML("beforeend", elemento);
+        if (status === 'Pendiente') {
+            document.querySelector('#lista-pendientes-jeyson').insertAdjacentHTML("beforeend", elemento);
+        } else if (status === 'En Proceso') {
+            document.querySelector('#lista-progreso-jeyson').insertAdjacentHTML("beforeend", elemento);
+        } else if (status === 'Completada') {
+            document.querySelector('#lista-completadas-jeyson').insertAdjacentHTML("beforeend", elemento);
+        }
     } else if (persona === 'Cristian') {
-        listaCristian.insertAdjacentHTML("beforeend", elemento);
+        if (status === 'Pendiente') {
+            document.querySelector('#lista-pendientes-cristian').insertAdjacentHTML("beforeend", elemento);
+        } else if (status === 'En Proceso') {
+            document.querySelector('#lista-progreso-cristian').insertAdjacentHTML("beforeend", elemento);
+        } else if (status === 'Completada') {
+            document.querySelector('#lista-completadas-cristian').insertAdjacentHTML("beforeend", elemento);
+        }
     } else if (persona === 'Angeli') {
-        listaAngeli.insertAdjacentHTML("beforeend", elemento);
+        if (status === 'Pendiente') {
+            document.querySelector('#lista-pendientes-angeli').insertAdjacentHTML("beforeend", elemento);
+        } else if (status === 'En Proceso') {
+            document.querySelector('#lista-progreso-angeli').insertAdjacentHTML("beforeend", elemento);
+        } else if (status === 'Completada') {
+            document.querySelector('#lista-completadas-angeli').insertAdjacentHTML("beforeend", elemento);
+        }
     } else if (persona === 'Silvia') {
-        listaSilvia.insertAdjacentHTML("beforeend", elemento);
+        if (status === 'Pendiente') {
+            document.querySelector('#lista-pendientes-silvia').insertAdjacentHTML("beforeend", elemento);
+        } else if (status === 'En Proceso') {
+            document.querySelector('#lista-progreso-silvia').insertAdjacentHTML("beforeend", elemento);
+        } else if (status === 'Completada') {
+            document.querySelector('#lista-completadas-silvia').insertAdjacentHTML("beforeend", elemento);
+        }
     }
 
     // Guardar en Firebase solo si no viene de Firebase
@@ -525,7 +549,11 @@ function abrirModalEditar(tareaId) {
 function renderizarTareas() {
     // Limpia la lista actual
 
-
+    Object.keys(LIST).forEach(persona => {
+        document.querySelector(`#lista-pendientes-${persona.toLowerCase()}`).innerHTML = '';
+        document.querySelector(`#lista-progreso-${persona.toLowerCase()}`).innerHTML = '';
+        document.querySelector(`#lista-completadas-${persona.toLowerCase()}`).innerHTML = '';
+    });
     // Itera sobre la lista de tareas y vuelve a crear los elementos
     Object.keys(LIST).forEach(persona => {
         LIST[persona].forEach(tarea => {
