@@ -357,6 +357,18 @@ body {
 .seccion-tarea .estado {
     color: var(--green);
 }
+
+.seccion-tarea i {
+    font-size: 25px;
+    align-self: flex-end;
+    cursor: pointer;
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
+}
+
+.seccion-tarea i:hover {
+    color: var(--blue-light); /* Cambia el color al pasar el mouse */
+}
+
 /* 
 .seccion-tarea #lista-jeyson ul li{
     border: 1px solid darkcyan;
@@ -371,6 +383,97 @@ body {
     }
 
 } */
+
+#modal-editar {
+    display: none;
+}
+/* Estilos para el modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Mantener en su lugar */
+    z-index: 1000; /* Por encima de otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Alto completo */
+    overflow: auto; /* Habilitar scroll si es necesario */
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro con opacidad */
+}
+
+.modal-content {
+    background-color: var(--white); /* Color de fondo del modal */
+    margin: 10% auto; /* 10% desde arriba y centrado */
+    padding: 20px;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Sombra para profundidad */
+    width: 90%; /* Ancho del modal */
+    max-width: 600px; /* Ancho máximo del modal */
+    position: relative; /* Para posicionar el botón de cerrar */
+}
+
+.modal-content h2 {
+    color: var(--blue); /* Color del título */
+    margin-bottom: 20px; /* Espacio debajo del título */
+    text-align: center; /* Centrar el texto */
+}
+
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
+    width: 100%; /* Ancho completo */
+    padding: 12px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    border: 1px solid #ccc; /* Borde gris claro */
+    margin-bottom: 15px; /* Espacio entre elementos */
+    font-size: 1rem; /* Tamaño de fuente */
+    transition: border-color 0.3s; /* Transición para el borde */
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+    border-color: var(--blue); /* Cambiar el color del borde al enfocar */
+    outline: none; /* Sin contorno */
+}
+
+.modal-content button {
+    background-color: var(--pink); /* Color de fondo del botón */
+    color: var(--white); /* Color del texto del botón */
+    padding: 10px 15px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar cursor al pasar sobre el botón */
+    transition: background-color 0.3s; /* Transición para el color de fondo */
+}
+
+.modal-content button:hover {
+    background-color: var(--blue); /* Cambiar color al pasar el mouse */
+}
+
+.modal-content button:last-child {
+    background-color: #ff4d4d; /* Color diferente para el botón de cerrar */
+}
+
+.modal-content button:last-child:hover {
+    background-color: #ff1a1a; /* Color diferente al pasar el mouse */
+}
+
+/* Estilo del botón de cerrar */
+.close {
+    position: absolute; /* Posicionar el botón de cerrar */
+    top: 10px; /* Desde la parte superior */
+    right: 15px; /* Desde la derecha */
+    color: #aaa; /* Color del botón de cerrar */
+    font-size: 28px; /* Tamaño del botón de cerrar */
+    font-weight: bold; /* Negrita */
+    cursor: pointer; /* Cambiar cursor al pasar sobre el botón */
+}
+
+.close:hover,
+.close:focus {
+    color: var(--blue); /* Cambiar color al pasar el mouse */
+    text-decoration: none; /* Sin subrayado */
+}
 
 
 @media (max-width: 900px) {

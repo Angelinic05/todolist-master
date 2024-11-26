@@ -71,7 +71,52 @@
         <h3>SILVIA</h3>
         <ul id="lista-silvia"></ul>
     </div>
-    <script type="module" src="index.js"></script>
 
+
+
+    <!-- Modal para editar tarea -->
+<div id="modal-editar" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h2>Editar Tarea</h2>
+        <input type="text" id="input-tarea" placeholder="Nombre de la tarea" required>
+        <div class="fechas">
+            <input type="date" id="start-date-modal" required>
+            <input type="date" id="end-date-modal" required>
+        </div>
+        <textarea id="details-modal" placeholder="Detalles de la tarea" required></textarea>
+        <select id="status-modal" required>
+            <option value="Pendiente">Pendiente</option>
+            <option value="En Proceso">En Proceso</option>
+            <option value="Completada">Completada</option>
+        </select>
+        <select id="persona-modal" required>
+            <option value="Jeyson">Jeyson</option>
+            <option value="Cristian">Cristian</option>
+            <option value="Angeli">Angeli</option>
+            <option value="Silvia">Silvia</option>
+        </select>
+        <h3>Checklist</h3>
+        <ul id="checklist-items-modal"></ul>
+        <input type="text" id="checklist-item-modal" placeholder="Nuevo ítem de checklist">
+        <button id="add-checklist-item-modal">Agregar ítem</button>
+    
+        <button onclick="cerrarModal()" id="guardar-cambios-modal">Guardar cambios</button>
+        <button onclick="cerrarModal()">Cerrar</button>
+    </div>
+</div>
+
+<!-- CSS para el modal -->
+<style>
+
+</style>
+
+
+    <script type="module" src="index.js"></script>
+    <script>
+        function cerrarModal() {
+        document.getElementById('modal-editar').style.display = 'none';
+        document.reload();
+    }
+    </script>
 </body>
 </html>

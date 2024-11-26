@@ -37,6 +37,7 @@ let LIST = {
     Silvia: []
 };
 let id = 0;
+let currentEditId = null;
 
 const FECHA = new Date();
 fecha.innerHTML = FECHA.toLocaleDateString('es-MX', { weekday: 'long', month: 'short', day: 'numeric' });
@@ -87,7 +88,7 @@ async function agregarTarea(tarea, id, realizado, eliminado, startDate, endDate,
 
     const elemento = `
     <li id="elemento-${id}">
-        <i class="far ${REALIZADO}" data="realizado" id="${id}"></i>
+        <i class="fas fa-pencil-alt" data="editar" id="${id}"></i>
         <p class="fecha">Desde: ${startDate} Hasta: ${endDate}</p>
         <p class="text ${LINE}">${tarea}</p>
         <p class="detalles">${details}</p>
@@ -377,6 +378,172 @@ async function cargarTareas() {
         console.error("Error al cargar tareas: ", error);
     }
 }
+async function actualizarTarea() {
+    console.log("Función actualizarTarea llamada"); 
+    const tareaId = currentEditId; 
+    let tarea;
+    for (const persona in LIST) {
+        tarea = LIST[persona].find(t => t.id === parseInt(tareaId));
+        if (tarea) break; 
+    }
+
+    if (tarea) {
+        const nuevaTarea = document.getElementById('input-tarea').value; // Cambiado
+        const nuevaStartDate = document.getElementById('start-date-modal').value; // Cambiado
+        const nuevaEndDate = document.getElementById('end-date-modal').value; // Cambiado
+        const nuevosDetalles = document.getElementById('details-modal').value; // Cambiado
+        const nuevoStatus = document.getElementById('status-modal').value; // Cambiado
+        const nuevaPersona = document.getElementById('persona-modal').value; // Cambiado
+
+        // Obtener los ítems del checklist del modal
+        const checklistItems = Array.from(document.getElementById('checklist-items-modal').children).map(item => ({
+            text: item.querySelector('.checklist-text').textContent,
+            realizado: item .querySelector('.checklist-checkbox').checked
+        }));
+
+        // Actualizar la tarea
+        tarea.nombre = nuevaTarea;
+        tarea.startDate = nuevaStartDate;
+        tarea.endDate = nuevaEndDate;
+        tarea.details = nuevosDetalles;
+        tarea.status = nuevoStatus;
+        tarea.persona = nuevaPersona;
+        tarea.checklist = checklistItems;
+
+        try {
+            await updateDoc(doc(db, 'tareas', tarea.firebaseId), {
+                nombre: nuevaTarea,
+                startDate: nuevaStartDate,
+                endDate: nuevaEndDate,
+                details: nuevosDetalles,
+                status: nuevoStatus,
+                persona: nuevaPersona,
+                checklist: checklistItems
+            });
+            console.log("Tarea actualizada en Firebase");
+        } catch (error) {
+            console.error("Error actualizando tarea en Firebase: ", error);
+        }
+
+        renderizarTareas();
+        cerrarModal(); // Cierra el modal después de guardar los cambios
+    }
+}
+
+document.getElementById('add-checklist-item-modal').addEventListener('click', function() {
+    const itemText = document.getElementById('checklist-item-modal').value.trim();
+    if (itemText) {
+        const listItem = document.createElement('li');
+        listItem.classList.add('checklist-item');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.classList.add('checklist-checkbox');
+
+        const circle = document.createElement('span');
+        circle.classList.add('checklist-circle');
+
+        const textSpan = document.createElement('span');
+        textSpan.classList.add('checklist-text');
+        textSpan.textContent = itemText;
+
+        // Aquí está la corrección
+        listItem.appendChild(checkbox);
+        listItem.appendChild(circle);
+        listItem.appendChild(textSpan); // Cambié ListItem a listItem
+        document.getElementById('checklist-items-modal').appendChild(listItem);
+        document.getElementById('checklist-item-modal').value = ''; // Limpiar el campo de entrada
+    }
+});
+function abrirModalEditar(tareaId) {
+    let tarea;
+    for (const persona in LIST) {
+        tarea = LIST[persona].find(t => t.id === parseInt(tareaId));
+        if (tarea) break; 
+    }
+    
+    if (tarea) {
+        // Asignar los valores existentes a los campos del modal
+        document.getElementById('input-tarea').value = tarea.nombre || '';
+        document.getElementById('start-date-modal').value = tarea.startDate || '';
+        document.getElementById('end-date-modal').value = tarea.endDate || '';
+        document.getElementById('details-modal').value = tarea.details || '';
+        document.getElementById('status-modal').value = tarea.status || '';
+        document.getElementById('persona-modal').value = tarea.persona || '';
+        currentEditId = tareaId; 
+
+        // Limpiar checklist anterior en el modal
+        const checklistItemsListModal = document.getElementById('checklist-items-modal');
+        checklistItemsListModal.innerHTML = '';
+
+        // Agregar ítems del checklist al modal
+        tarea.checklist.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.classList.add('checklist-item');
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.classList.add('checklist-checkbox');
+            checkbox.checked = item.realizado; // Marcar como checked si está realizado
+
+            const circle = document.createElement('span');
+            circle.classList.add('checklist-circle');
+
+            const textSpan = document.createElement('span');
+            textSpan.classList.add('checklist-text');
+            textSpan.textContent = item.text;
+
+            // Agregar evento para alternar el estado del checkbox
+            circle.addEventListener('click', function() {
+                checkbox.checked = !checkbox.checked; // Alternar el estado del checkbox
+                checkbox.dispatchEvent(new Event('change')); // Disparar el evento de cambio
+            });
+
+            // Actualizar el estado en el objeto cuando cambie el checkbox
+            checkbox.addEventListener('change', function() {
+                item.realizado = checkbox.checked; // Actualizar el estado en el objeto
+                if (checkbox.checked) {
+                    circle.classList.add('completed'); // Cambiar el estilo si está marcado
+                } else {
+                    circle.classList.remove('completed'); // Cambiar el estilo si está desmarcado
+                }
+            });
+
+            listItem.appendChild(checkbox);
+            listItem.appendChild(circle);
+            listItem.appendChild(textSpan);
+            checklistItemsListModal.appendChild(listItem);
+        });
+
+        // Mostrar el modal
+        document.getElementById('modal-editar').style.display = 'block'; 
+    }
+}
+
+
+
+function renderizarTareas() {
+    // Limpia la lista actual
+
+
+    // Itera sobre la lista de tareas y vuelve a crear los elementos
+    Object.keys(LIST).forEach(persona => {
+        LIST[persona].forEach(tarea => {
+            const elemento = document.createElement('li');
+            elemento.innerHTML = `
+                <i class="fas fa-pencil-alt" data="editar" id="${tarea.id}"></i>
+                <p class="fecha">Desde: ${tarea.startDate} Hasta: ${tarea.endDate}</p>
+                <p class="text">${tarea.nombre}</p>
+                <p class="detalles">${tarea.details}</p>
+                <p class="estado">${tarea.status}</p>
+                <p class="persona">Asignada a: ${tarea.persona}</p>
+                <ul>${tarea.checklist.map(item => `<li>${item.text} - ${item.realizado ? 'Hecho' : 'Pendiente'}</li>`).join('')}</ul>
+                <i class="fas fa-trash de" data-eliminado data-persona="${tarea.persona}" id="${tarea.id}"></i>
+            `;
+            listaTareas.appendChild(elemento);
+        });
+    });
+}
 
 document.addEventListener('click', function(event) {
     if (event.target.dataset.eliminado !== undefined) {
@@ -384,10 +551,14 @@ document.addEventListener('click', function(event) {
         eliminarTarea(event.target.id, persona); 
     } else if (event.target.dataset.realizado !== undefined) {
         tareaRealizada(event.target);
+    } else if (event.target.dataset.editar !== undefined || event.target.classList.contains('fa-pencil-alt')) {
+        const tareaId = event.target.id; // Aquí obtienes el ID del lápiz
+        abrirModalEditar(tareaId); 
     }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
     configurarEventosVistas();
     cargarTareas();
+    document.getElementById('guardar-cambios-modal').addEventListener('click', actualizarTarea);
 });
