@@ -12,9 +12,15 @@
    --black: #000000;
 }
 
-/* #de3768 rosa
-#6b3799 morado
-#1a2427 gris */
+/* morado #d4cdfe
+azul #c6e6fe
+amarillo #f9e8cc
+rojo #fac6c8
+letra morada #4e3da3
+letra azul #215584
+letra amarilla #dd9644
+letra roja #be353b
+fondo #f7fbfe */
 
 body {
     /* background: conic-gradient(from 0deg, #ff7e5f, #feb47b, #ff7e5f); */
@@ -512,13 +518,23 @@ body {
     text-decoration: none; /* Sin subrayado */
 }
 
+ @media (max-width: 1300px) {
+    .tareas-container{
+        width: 100%;
+        min-width: 90vh;
+        grid-template-columns: repeat(3, 1fr); 
+    }
 
+} 
 @media (max-width: 900px) {
+
     #lista-angeli, #lista-jeyson, #lista-cristian, #lista-silvia{
         display: flex;
         flex-wrap: wrap;
         gap: 2%;
     }
+
+
 
     .agregar-tarea,
     .seccion-tarea,
